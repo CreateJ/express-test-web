@@ -1,21 +1,31 @@
 <script setup>
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import HelloWorld from './components/HelloWorld.vue'
+import api from '@/api/index'
+import { onMounted, ref } from "vue";
+
+const list = ref([])
+
+onMounted(() => {
+  api.getList({pageNo: 1}).then(res => {
+  // api.getList({pageNo: 1, pageSize: 10}).then(res => {
+    console.log(res)
+    list.value = res.data.list
+  }).catch(err => {
+    console.log(err)
+  })
+})
 </script>
 
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3 + Vite" />
+  <div>
+    <h2>Hello World</h2>
+    <el-table :data="list">
+      <el-table-column prop="id" label="id" width="180" />
+      <el-table-column prop="name" label="name" width="180" />
+    </el-table>
+    <el-pagination layout="prev, pager, next" :total="50" />
+  </div>
+
 </template>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
